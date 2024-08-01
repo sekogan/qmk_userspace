@@ -8,6 +8,7 @@ python3 -m pip install qmk
 rm get-pip.py
 
 python3 -m pip install --upgrade milc
+python3 -m pip install keymapviz  # needed by sofle
 
 userspacePath="$1"
 
