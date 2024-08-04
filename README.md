@@ -1,13 +1,10 @@
 # My QMK-based keyboards
 
-These are customized keymaps for my QMK-based keyboards:
+These are customized keymaps for my QMK-based keyboards (newest first):
 
 - [Sofle](keyboards/sofle/keymaps/sekogan/README.md)
-
-Have not migrated to this repository yet:
-
-- [Kbd75 v3.1](kbd75hs/README.md)
-- [Kbd75 v2](kbd75v2/README.md)
+- [Kbd75 v3.1](keyboards/kbdfans/kbd75hs/keymaps/sekogan/README.md)
+- [Kbd75 v2](keyboards/kbdfans/kbd75/keymaps/sekogan/README.md)
 
 ## How to build
 
