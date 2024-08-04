@@ -26,7 +26,7 @@ enum tap_dances {
   TAP_DANCE_RSFT,
 };
 
-#define CAPS_FN     LT(SECOND_LAYER, KC_CAPSLOCK)
+#define CAPS_FN     LT(SECOND_LAYER, KC_CAPS_LOCK)
 #define ESC_FN2     LT(THIRD_LAYER, KC_ESCAPE)
 
 #define LSFT_A      LSFT_T(KC_A)
@@ -61,11 +61,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [THIRD_LAYER] = LAYOUT_75_ansi(
-    XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  RESET,    XXXXXXX,  XXXXXXX,  KC_SLEP,
+    XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  QK_BOOT,  XXXXXXX,  XXXXXXX,  KC_SLEP,
     XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,  XXXXXXX,
     XXXXXXX,  RGB_TOG,  RGB_MOD,  RGB_HUD,  RGB_HUI,  RGB_SAD,  RGB_SAI,  RGB_VAD,  RGB_VAI,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            XXXXXXX,
     XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,                      XXXXXXX,  XXXXXXX,
-    _______,  _______,  BL_TOGG,  BL_BRTG,  BL_DEC,   BL_INC,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            _______,            XXXXXXX,  XXXXXXX,
+    _______,  _______,  BL_TOGG,  BL_BRTG,  BL_DOWN,  BL_UP,    XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,            _______,            XXXXXXX,  XXXXXXX,
     _______,  _______,  _______,                                XXXXXXX,                                _______,  _______,  _______,  XXXXXXX,  XXXXXXX,  XXXXXXX
   ),
 };
@@ -73,15 +73,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // The "led_set_user" is called in initialization and any time the "lock" state is changed for any of the states.
 // It checks the NUM LOCK state, and if it's disabled, sends the "numlock" key press to enable it.
 void led_set_user(uint8_t usb_led) {
-  if (!IS_LED_ON(usb_led, USB_LED_NUM_LOCK)) {
-    tap_code(KC_NUMLOCK);
+  if (!host_keyboard_led_state().num_lock) {
+    tap_code(KC_NUM_LOCK);
   }
 }
 
 bool dance_lsft_unregister_pending = false;
 bool dance_rsft_unregister_pending = false;
 
-void dance_lsft_finished(qk_tap_dance_state_t *state, void *user_data) {
+void dance_lsft_finished(tap_dance_state_t *state, void *user_data) {
   if (state->pressed) {
     register_mods(MOD_LSFT);
     dance_lsft_unregister_pending = true;
@@ -92,14 +92,14 @@ void dance_lsft_finished(qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
-void dance_lsft_reset(qk_tap_dance_state_t *state, void *user_data) {
+void dance_lsft_reset(tap_dance_state_t *state, void *user_data) {
   if (dance_lsft_unregister_pending) {
     dance_lsft_unregister_pending = false;
     unregister_mods(MOD_LSFT);
   }
 }
 
-void dance_rsft_finished(qk_tap_dance_state_t *state, void *user_data) {
+void dance_rsft_finished(tap_dance_state_t *state, void *user_data) {
   if (state->pressed) {
     register_mods(MOD_BIT(KC_RSFT));
     dance_rsft_unregister_pending = true;
@@ -110,14 +110,14 @@ void dance_rsft_finished(qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
-void dance_rsft_reset(qk_tap_dance_state_t *state, void *user_data) {
+void dance_rsft_reset(tap_dance_state_t *state, void *user_data) {
   if (dance_rsft_unregister_pending) {
     dance_rsft_unregister_pending = false;
     unregister_mods(MOD_BIT(KC_RSFT));
   }
 }
 
-qk_tap_dance_action_t tap_dance_actions[] = {
+tap_dance_action_t tap_dance_actions[] = {
   [TAP_DANCE_LSFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_lsft_finished, dance_lsft_reset),
   [TAP_DANCE_RSFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_rsft_finished, dance_rsft_reset),
 };
